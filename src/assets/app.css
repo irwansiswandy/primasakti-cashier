@@ -1,0 +1,18 @@
+@import './fonts/OpenSans/opensans.css';
+@import './fonts/glacial_indifference/glacialindifference.css';
+
+.v-application {
+    font-family: 'open_sansregular';
+}
+
+.font-logo {
+  font-family: 'glacial_indifferenceregular';
+}
+
+#indicator {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 12px;
+    margin-left: 12px;
+}
