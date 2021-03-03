@@ -131,7 +131,7 @@
       },
       INIT_authorized() {
         this.$axios
-          .get('api/cashier')
+          .get('/api/cashier')
           .then((response) => {
             if (response.status == 200) {
               this.$set(this.$store.state, 'authorized', true);
@@ -156,9 +156,15 @@
             // This handles PAYMENT's activities
             if (activity.subject_type == 'App\\Payment') {
               let payment = activity.properties.subject;
-              // console.log(['payment activity detected...', payment]);
-              if (activity.log_name == 'payment-created' || activity.log_name == 'payment-updated') {
+              console.log({
+                message: 'payment activity detected.',
+                data: payment
+              });
+              if (activity.log_name == 'payment-created') {
                 this.set_invoice_payment([payment.invoice_id, payment]);
+              }
+              else if (activity.log_name == 'payment-updated') {
+                this.set_invoice_payment([payment.invoice_id, payment.new]);
               }
               else if (activity.log_name == 'payment-deleted') {
                 //
@@ -183,7 +189,7 @@
       },
       INIT_today_invoices(date) {
         this.$axios
-            .get('api/cashier/invoices', {
+            .get('/api/cashier/invoices', {
               params: {
                 scope: 'withinDate:' + date,
                 order_by: 'created_at, desc',
@@ -198,7 +204,7 @@
       },
       INIT_unpaid_invoices() {
         this.$axios
-            .get('api/cashier/invoices', {
+            .get('/api/cashier/invoices', {
               params: {
                 scope: 'unpaid',
                 order_by: 'created_at, desc',
@@ -213,7 +219,7 @@
       },
       INIT_invoices_paid_on(date) {
         this.$axios
-            .get('api/cashier/invoices', {
+            .get('/api/cashier/invoices', {
               params: {
                 scope: 'paidDate:' + date,
                 includes: 'user,admin,payment'

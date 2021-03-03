@@ -253,7 +253,13 @@
         data() {
             return {
                 table_headers: [
-                    { text: '', value: '', align: 'left', sortable: false, filterable: false },
+                    { 
+                        text: '',
+                        value: '',
+                        align: 'left',
+                        sortable: false,
+                        filterable: false
+                    },
                     { 
                         text: 'ID',
                         value: 'id', 
@@ -460,9 +466,8 @@
                         status: true
                     })
                     .then((response) => {
-                        let payment = response.data;
-                        this.set_invoice_payment([invoice.id, payment]);
-                        this.$set(this.dialog, 'show', false);
+                        console.log(response);
+                        this.$set(this.dialog, 'show', false)
                     });
             }
         },
