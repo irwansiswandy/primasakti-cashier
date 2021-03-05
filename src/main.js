@@ -4,7 +4,13 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 import Store from './store/main';
+
 import Router from './router/main';
+/*
+Router.beforeEach((to, from, next) => {
+  //
+});
+*/
 
 import Vuetify from './plugins/vuetify';
 import './assets/app.css';

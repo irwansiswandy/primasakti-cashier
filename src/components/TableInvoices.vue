@@ -3,6 +3,8 @@
         <v-data-table :loading="loading"
                       :headers="table_headers"
                       :items="invoices"
+                      :sort-by="['created_at']"
+                      sort-desc
                       :search="search.value"
                       :custom-filter="FILTER_by_search_key">
             <template v-slot:top>
@@ -91,7 +93,7 @@
                         <v-tooltip bottom
                                    v-if="item.payment && item.payment.type == 'bank_transfer' && !item.payment.status">
                             <template v-slot:activator="{ on, attrs }">
-                                <v-icon class="ml-1"
+                                <v-icon class="ml-1" color="green"
                                         v-bind="attrs" v-on="on"
                                         v-on:click="HANDLE_table_action('transfer_confirmation', item)">
                                     mdi-credit-card-check

@@ -1,13 +1,13 @@
 export default {
-  // primasakti-api-server's configuration here...
+  // primasakti-api-server
   server: {
-    host: 'localhost',
+    host: '192.168.0.91',
     port: 82,
     ssl: false
   },
-  // laravel-websockets configuration here...
+  // laravel-websockets
   pusher: {
-    host: 'localhost',
+    host: '192.168.0.91',
     port: 6001,
     ssl: false,
     app_key: 'jnjZsGNnPsPwItDg',

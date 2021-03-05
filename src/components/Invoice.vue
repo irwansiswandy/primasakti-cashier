@@ -41,7 +41,7 @@
                         <br>{{ item.product.name }}
                     </td>
                     <td :class="'text-' + GET_header_align('text', 'Qty')">
-                        {{ $numeral(item.qty).format('0,0') }}
+                        {{ Number(item.qty) }}
                     </td>
                     <td :class="'text-' + GET_header_align('text', 'Harga @')">
                         {{ $numeral(item.price).format('$0,0') }}

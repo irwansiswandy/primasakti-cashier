@@ -18,6 +18,10 @@ export default {
                 }
             }
             return false;
+        },
+        GET_invoice_date(invoice) {
+            let invoice_date = invoice.created_at.split(' ')[0];
+            return invoice_date; // returns value 'YYYY-MM-DD'
         }
     }
 }

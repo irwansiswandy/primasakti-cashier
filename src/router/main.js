@@ -4,7 +4,7 @@ Vue.use(VueRouter);
 
 import TodayInvoices from '../components/TodayInvoices';
 import UnpaidInvoices from '../components/UnpaidInvoices';
-import TodayPayments from '../components/TodayPayments';
+import PaymentsReport from '../components/PaymentsReport';
 
 export default new VueRouter({
     mode: 'history',
@@ -20,9 +20,9 @@ export default new VueRouter({
             name: 'Nota belum lunas'
         },
         {
-            path: '/payment',
-            component: TodayPayments,
-            name: 'Nota lunas hari ini'
+            path: '/payments',
+            component: PaymentsReport,
+            name: 'Pembayaran hari ini'
         }
     ]
 });

@@ -57,12 +57,16 @@
   import { mapState, mapGetters, mapMutations } from 'vuex';
   import ConnectionStatus from './components/ConnectionStatus.vue';
   import Env from './_env';
+  import Mixins from './mixins';
 
   export default {
     name: 'App',
     components: {
       ConnectionStatus
     },
+    mixins: [
+      Mixins
+    ],
     data() {
       return {
         nav_drawer: false
@@ -122,7 +126,8 @@
         'delete_invoice',
         'unset_invoices',
         'hide_snackbar',
-        'set_invoice_payment'
+        'set_invoice_payment',
+        'move_invoice'
       ]),
       INIT_server() {
         this.$axios
@@ -160,15 +165,85 @@
             // This handles PAYMENT's activities
             if (activity.subject_type == 'App\\Payment') {
               let payment = activity.properties.subject;
+              /* disabled
               console.log({
-                message: 'payment activity detected.',
+                activity: activity,
                 data: payment
               });
+              */
               if (activity.log_name == 'payment-created') {
-                this.set_invoice_payment([payment.invoice_id, payment]);
+                if (payment.status) {
+                  // add payment to invoice in unpaid_invoices and today_invoices
+                  this.set_invoice_payment([
+                    ['unpaid', 'today'],
+                    payment.invoice_id,
+                    payment
+                  ]);
+                  // move invoice from unpaid_invoices to invoices_paid_today
+                  this.move_invoice([
+                    'unpaid',
+                    'paid_today',
+                    payment.invoice_id
+                  ]);
+                }
+                else {
+                  // add payment to invoice's payment in unpaid_invoices
+                  this.set_invoice_payment([
+                    'unpaid',
+                    payment.invoice_id,
+                    payment
+                  ]);
+                  // add payment to invoice's payment in today_invoices if invoice created same as server_date
+                  if (this.GET_invoice_date(payment.invoice) == this.server_date) {
+                    this.set_invoice_payment([
+                      'today',
+                      payment.invoice_id,
+                      payment
+                    ]);
+                  }
+                }
               }
               else if (activity.log_name == 'payment-updated') {
-                this.set_invoice_payment([payment.invoice_id, payment.new]);
+                let updated_payment = payment.new;
+                if (updated_payment.status) {
+                  // updates invoice's payment in unpaid_invoices
+                  this.set_invoice_payment([
+                    'unpaid',
+                    payment.invoice_id,
+                    payment
+                  ]);
+                  // moves invoice to invoices_paid_today
+                  this.move_invoice([
+                    'unpaid',
+                    'paid_today',
+                    updated_payment.invoice_id
+                  ]);
+                  // updates invoice's payment in today_invoices
+                  // if invoice created same as server_date
+                  if (this.GET_invoice_date(updated_payment.invoice) == this.server_date) {
+                    this.set_invoice_payment([
+                      'today',
+                      updated_payment.invoice_id,
+                      updated_payment
+                    ]);
+                  }
+                }
+                else {
+                  // updates invoice's payment in unpaid_invoices
+                  this.set_invoice_payment([
+                    'unpaid',
+                    updated_payment.invoice_id,
+                    updated_payment
+                  ]);
+                  // updates invoice's payment in today_invoices if invoice created same as server_date
+                  if (this.GET_invoice_date(updated_payment.invoice) == this.server_date) {
+                    this.set_invoice_payment([
+                      'today',
+                      updated_payment.invoice_id,
+                      updated_payment
+                    ]);
+                  }
+                }
               }
               else if (activity.log_name == 'payment-deleted') {
                 //
@@ -177,16 +252,50 @@
             // This handles INVOICE's activities
             else if (activity.subject_type == 'App\\Invoice') {
               let invoice = activity.properties.subject;
-              // console.log(['invoice activity detected...', invoice]);
+              /* disabled
+              console.log({
+                activity: 'invoice',
+                data: invoice
+              });
+              */
               if (activity.log_name == 'invoice-created') {
-                this.add_invoice(['today', invoice]);
-                this.add_invoice(['unpaid', invoice]);
+                // add invoice to unpaid_invoices and today_invoices
+                this.add_invoice([
+                  ['unpaid', 'today'],
+                  invoice
+                ]);
               }
               else if (activity.log_name == 'invoice-updated') {
-                this.update_invoice([invoice.id, invoice]);
+                // invoice's object contains new, old
+                let updated_invoice = invoice.new;
+                // updates invoice in unpaid_invoices
+                this.update_invoice([
+                  'unpaid',
+                  updated_invoice.id,
+                  updated_invoice
+                ]);
+                // updates invoice in today_invoices if invoice created same as server_date
+                if (this.GET_invoice_date(updated_invoice) == this.server_date) {
+                  this.update_invoice([
+                    'today',
+                    updated_invoice.id,
+                    updated_invoice
+                  ]);
+                }
               }
               else if (activity.log_name == 'invoice-deleted') {
-                this.delete_invoice(invoice.id);
+                // deletes invoice from unpaid_invoices
+                this.delete_invoice([
+                  'unpaid',
+                  invoice.id
+                ]);
+                // deletes invoice from today_invoices if invoice created same as server_date
+                if (this.GET_invoice_date(invoice) == this.server_date) {
+                  this.delete_invoice([
+                    'today',
+                    invoice.id
+                  ]);
+                }
               }
             }
         });
