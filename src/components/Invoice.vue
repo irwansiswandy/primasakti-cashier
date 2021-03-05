@@ -73,6 +73,13 @@
             </v-col>
         </v-row>
     </span>
+    <!-- Loading -->
+    <span v-else>
+        <v-progress-linear indeterminate
+                           color="primary">
+        </v-progress-linear>
+    </span>
+    <!-- /Loading -->
 </template>
 
 <script>

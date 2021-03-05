@@ -1,6 +1,7 @@
 <template>
     <span id="table-invoices">
-        <v-data-table :headers="table_headers"
+        <v-data-table :loading="loading"
+                      :headers="table_headers"
                       :items="invoices"
                       :search="search.value"
                       :custom-filter="FILTER_by_search_key">
