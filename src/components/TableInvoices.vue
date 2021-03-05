@@ -12,8 +12,8 @@
                                   prepend-icon="mdi-magnify"
                                   label="Semua kolom"
                                   :items="table_headers"
-                                  return-object
-                                  v-on:input="SET_search_key">
+                                  item-value="value"
+                                  v-model="search.key">
                         </v-select>
                     </v-col>
                     <v-col>
@@ -353,14 +353,6 @@
                 'show_snackbar',
                 'set_invoice_payment'
             ]),
-            SET_search_key(table_header) {
-                if (table_header) {
-                    this.$set(this.search, 'key', table_header.value);
-                }
-                else {
-                    this.$set(this.search, 'key', '');
-                }   
-            },
             FILTER_by_search_key(value, search, table_item) {
                 let regexed_search = new RegExp(search, 'i');
                 if (this.search.key) {
@@ -474,6 +466,7 @@
         },
         created() {
             this.$numeral.locale('id');
+            this.$set(this.search, 'key', 'invoice_no');
         }
     }
 </script>

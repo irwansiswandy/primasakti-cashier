@@ -1,17 +1,22 @@
 <template>
     <span id="connection-status">
-        <v-icon color="success"
-                class="ml-2 mr-2"
+        <v-icon color="green"
+                class="mr-2"
                 v-if="server.on">
             mdi-lan-connect
         </v-icon>
-        <v-icon v-else
-                color="error"
-                class="ml-2 mr-2">
+        <v-icon color="red"
+                class="mr-2"
+                v-else>
             mdi-lan-disconnect
         </v-icon>
-        <v-icon class="ml-2 mr-2">
+        <v-icon color="green"
+                v-if="authorized">
             mdi-account-check
+        </v-icon>
+        <v-icon color="red"
+                v-else>
+            mdi-account-check-cancel
         </v-icon>
     </span>
 </template>

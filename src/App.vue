@@ -29,18 +29,22 @@
       </v-app-bar>
       <!-- /App bar -->
       <!-- Content -->
-      <v-container fluid class="pt-0 pb-13">
-        <v-row class="blue lighten-4">
+      <v-container fluid>
+        <v-row>
           <v-col class="title">
             {{ title }}
           </v-col>
         </v-row>
         <router-view></router-view>
       </v-container>
-      <v-footer fixed color="grey lighten-2">
+      <!-- /Content -->
+      <!-- Connection status -->
+      <v-footer fixed
+                color="transparent"
+                class="pb-3">
         <connection-status></connection-status>
       </v-footer>
-      <!-- /Content -->
+      <!-- /Connection status -->
       <v-snackbar dark color="green"
                   v-model="snackbar.show">
         {{ snackbar.text }}
